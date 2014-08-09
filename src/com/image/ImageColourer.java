@@ -3,7 +3,10 @@ package com.image;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.image.colourer.ImageDisplay;
@@ -19,7 +22,9 @@ public class ImageColourer {
 	  }
 	  final ImageDisplay display = ImageDisplay.create();
 	  File picturesDir = new File(args[0]);
-	  for (File file : picturesDir.listFiles()) {
+	  List<File> files = Arrays.asList(picturesDir.listFiles());
+	  Collections.shuffle(files);
+    for (File file : files) {
 	    display.newImage();
 	    final BufferedImage original = ImageReader.read(file);
 	    if (original == null) {
@@ -36,7 +41,9 @@ public class ImageColourer {
         Thread.sleep(10);
         for (int xDiff = 0; xDiff < ImagePixels.PIXEL_SIZE; ++xDiff) {
           copyColour(original, copy, nextPoint.x, nextPoint.y, nextPoint.x + xDiff, nextPoint.y + xDiff);
+          copyColour(original, copy, nextPoint.x, nextPoint.y, nextPoint.x + xDiff + 1, nextPoint.y + xDiff);
           copyColour(original, copy, nextPoint.x, nextPoint.y, nextPoint.x + xDiff, nextPoint.y + ImagePixels.PIXEL_SIZE - xDiff - 1);
+          copyColour(original, copy, nextPoint.x, nextPoint.y, nextPoint.x + xDiff + 1, nextPoint.y + ImagePixels.PIXEL_SIZE - xDiff - 1);
         }
         display.show(copy);
       }
